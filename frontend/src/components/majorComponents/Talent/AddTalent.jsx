@@ -32,14 +32,12 @@ const AddTalent = ({ onClose }) => {
     };
     try {
       dispatch(addTalent(payload));
+
+      setFormData({ name: "", email: "", skills: "",experience:0 });
+      onClose();
     } catch (error) {
-      
+      console.alert("Somthing Went Wrong");
     }
-
-    
-
-    // Reset form
-  //  setFormData({ name: "", email: "", skills: "" });
   };
 
   return (
