@@ -13,9 +13,21 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS.split(",");
 
 app.use(
   cors({
-    origin: allowedOrigins, 
+    origin: function (origin, callback) {
+      // allow requests with no origin (like Postman or server-to-server)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        // origin is allowed
+        callback(null, true);
+      } else {
+        // origin is not allowed
+        callback(new Error("CORS policy: origin not allowed"), false);
+      }
+    },
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true, // if you use cookies/auth
   })
 );
 app.use(express.json());
