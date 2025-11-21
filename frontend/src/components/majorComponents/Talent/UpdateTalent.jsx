@@ -1,19 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { addTalent } from "../../../redux/talentSlice"; // your thunk
+import { updateTalent } from "../../../redux/talentSlice"; // your thunk for update
 import InputBox from "../../minorComponents/InputBox";
 import ModelContainer from "../../minorComponents/ModelContainer";
 import Button from "../../minorComponents/Button";
+import { toast } from "react-toastify";
 
-const AddTalent = ({ onClose }) => {
+function UpdateTalent({ onClose, defaultData }) {
   const dispatch = useDispatch();
-
+  console.log(defaultData)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     skills: "",
     experience: 0,
   });
+console.log(defaultData)
+  // Populate form with default data
+  useEffect(() => {
+    if (defaultData) {
+      setFormData({
+        name: defaultData.name || "",
+        email: defaultData.email || "",
+        skills: defaultData.skills ? defaultData.skills.join(", ") : "",
+        experience: defaultData.experience || 0,
+      });
+    }
+  }, [defaultData]);
 
   const handleChange = (e) => {
     setFormData({
@@ -25,25 +38,26 @@ const AddTalent = ({ onClose }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // convert skills into array
     const payload = {
+      id: defaultData._id, // pass the talent ID for update
       name: formData.name,
       email: formData.email,
       experience: Number(formData.experience),
       skills: formData.skills.split(",").map((s) => s.trim()),
     };
+
     try {
-      dispatch(addTalent(payload));
-      
-      setFormData({ name: "", email: "", skills: "", experience: 0 });
+      dispatch(updateTalent(payload)); // dispatch update instead of add
+
       onClose();
     } catch (error) {
-      console.alert("Somthing Went Wrong");
+      console.error("Something went wrong:", error);
+      toast.error("Something went wrong");
     }
   };
 
   return (
-    <ModelContainer title={"Add New Talent"} onClose={onClose}>
+    <ModelContainer title={"Update Talent"} onClose={onClose}>
       <form onSubmit={handleSubmit}>
         <InputBox
           label="Name"
@@ -69,13 +83,13 @@ const AddTalent = ({ onClose }) => {
           name="experience"
           placeholder="e.g. 3"
           type="number"
-          min={0}
+            min={0}
           max={100}
           value={formData.experience}
           onChange={handleChange}
           required
-
         />
+
         <InputBox
           label="Skills (comma separated)"
           name="skills"
@@ -89,11 +103,11 @@ const AddTalent = ({ onClose }) => {
           type="submit"
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
         >
-          Add Talent
+          Update Talent
         </Button>
       </form>
     </ModelContainer>
   );
-};
+}
 
-export default AddTalent;
+export default UpdateTalent;

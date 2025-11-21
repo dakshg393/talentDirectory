@@ -1,1 +1,83 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-primary: #7c3aed;
+
+  --color-surface: #ffffff;
+  --color-surface-dark: #0f172a;
+
+  --color-border-color: #cccccc;
+
+ }
+
+ .bg-gradient-primary {
+  background: linear-gradient(90deg, #7c3aed 0%, #d946ef 100%);
+}
+.morph-blob {
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(
+    circle at center,
+    #6366f1 0%,
+    #a855f7 40%,
+    #ec4899 70%,
+    transparent 100%
+  );
+  opacity: 0.25;
+  filter: blur(80px);
+  animation: blob-move 12s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+
+@keyframes blob-move {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(60px, -50px) scale(1.25);
+  }
+  66% {
+    transform: translate(-80px, 50px) scale(0.9);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+.main-left-gradient {
+  background: radial-gradient(
+    circle at left center,
+    rgba(168, 85, 247, 0.4),
+    rgba(59, 130, 246, 0.28),
+    rgba(14, 165, 233, 0.22),
+    rgba(255, 255, 255, 0.98)
+  );
+}
+
+.morphing-gradient {
+  background: linear-gradient(
+    180deg,
+    rgba(99, 102, 241, 0.5),
+    rgba(236, 72, 153, 0.5),
+    rgba(14, 165, 233, 0.5)
+  );
+  background-size: 600% 600%;
+  animation: gradientMorph 10s ease infinite;
+  opacity: 0.7;
+}
+
+@keyframes gradientMorph {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

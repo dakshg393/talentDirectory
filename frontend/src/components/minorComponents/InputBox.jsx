@@ -6,24 +6,26 @@ const InputBox = ({
   value,
   onChange,
   required = false,
+  min,
+  max,
+  maxLength,
 }) => {
   return (
     <div style={{ marginBottom: "12px" }}>
-      {label && <label style={{ display: "block", marginBottom: "6px" }}>{label}</label>}
+      {label && (
+        <label style={{ display: "block", marginBottom: "6px" }}>{label}</label>
+      )}
 
       <input
+        className="w-full p-2 border border-gray-300 rounded-md focus:border-purple-600 focus:ring-1 focus:ring-purple-600 transition"
         type={type}
         name={name}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
         required={required}
-        style={{
-          width: "100%",
-          padding: "10px",
-          border: "1px solid #ccc",
-          borderRadius: "6px",
-        }}
+        {...(type === "number" ? { min, max } : {})}
+        {...(type !== "number" && maxLength ? { maxLength } : {})}
       />
     </div>
   );
